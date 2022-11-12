@@ -258,6 +258,9 @@ namespace BailCustomChars
                         }
                         newChar.modelIdArray = new Il2CppStructArray<int>(4);
                         newChar.modelIdArray[0] = tempItem.modelId;
+                        newChar.modelIdArray[1] = tempItem.modelId; //will add unique modelids later
+                        newChar.modelIdArray[2] = tempItem.modelId; //jsons will need updates though
+                        newChar.modelIdArray[3] = tempItem.modelId;
                         if (character.cloneAnimId > -1) {
                             newChar.animId = character.animId;
                         }
