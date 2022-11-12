@@ -11,3 +11,5 @@ bugs:
 
 documentation will be added later i dunno man i spent 9 days on this monstrosity and my code is held together with duct tape
 most asset paths in the json are just the direct path to the asset, minus the extension and in all lowercase
+
+also requires newtonsoft.json to be in bepinex/core
