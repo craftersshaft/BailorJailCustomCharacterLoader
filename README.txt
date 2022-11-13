@@ -3,7 +3,7 @@ bail or jail custom character loader by craftersshaft
 this one is way worse than the skin loader but its easier for streamers to set up without a million years of playtime
 
 bugs:
--animations do not load properly, and will require making a prefab for Every. Single. One.
+-animations are hardcoded to fbx
 -i have not tested this ingame so it might break some stuff
 -no way to customize lanterns/passive effects yet
 -no checking for if other people have the mod

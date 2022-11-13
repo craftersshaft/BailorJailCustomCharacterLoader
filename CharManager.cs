@@ -271,6 +271,9 @@ namespace BailCustomChars
                         System.Type tempType = tempAnims.GetType();
                         tempAnims.animId = character.animId;
 
+                        GameObject origModelObject;
+                        origModelObject = ResourceManager.GetInstance().Load<GameObject>(ModelAsset.instance.GetAsset(character.modelId).bodyModelPath);
+
                         if (character.cloneAnimId > -1)
                         {
                             foreach (var field in tempType.GetProperties())
@@ -286,53 +289,40 @@ namespace BailCustomChars
                                 }
                             }
                         }
-                        if (character.animatorPath != null && character.animatorPath != "")
-                        {
-                            BailCharPlugin.Instance.Log.LogError("we at least got past the "+character.animatorPath);
-
-                            string animatorPathWithPrefab = character.animatorPath + ".prefab";
-                            string animatorPathWithoutExtension = Path.GetFileNameWithoutExtension(animatorPathWithPrefab);
-                            if (!ResourceManager.GetInstance().m_unityObjectMap.ContainsKey(animatorPathWithoutExtension))
-                            {
-                                BailCharPlugin.Instance.Log.LogDebug("about to add the animator for " + animatorPathWithoutExtension);
-                                GameObject animatorGameObject = realAssetBundle.LoadAsset<GameObject>(animatorPathWithPrefab);
-                                Animator animatorAnimator = animatorGameObject.GetComponentInChildren<Animator>();
-                                ResourceManager.GetInstance().m_unityObjectMap.Add(animatorPathWithoutExtension, new ResourceManager.ResourceInfo());
-                                ResourceManager.GetInstance().m_unityObjectMap[animatorPathWithoutExtension].objects = new Il2CppReferenceArray<UnityEngine.Object>(2);
-                                ResourceManager.GetInstance().m_unityObjectMap[animatorPathWithoutExtension].objects[0] = animatorGameObject;
-                                ResourceManager.GetInstance().m_unityObjectMap[animatorPathWithoutExtension].objects[1] = animatorAnimator.avatar;
-             
-                            }
-                            ModelAsset.instance.GetAsset(character.modelId).rootBonePath = character.animatorPath;
-
-
-                        }
 
                             for (var chuck = 0; chuck < character.animReplaceNames.Length; chuck++)
-                        {
+                            {
                             string currentName = character.animReplaceNames[chuck];
                             string currentPath = character.animReplacePaths[chuck];
-                            BailCharPlugin.Instance.Log.LogDebug("key we wanna replace: "+currentName);
+                            BailCharPlugin.Instance.Log.LogInfo("key we wanna replace: "+currentName);
                             if (tempType.GetProperty(currentName).SetMethod == null || tempType.GetProperty(currentName) == null || !currentName.EndsWith("FileName"))
                             {
                                 continue;
 
                             }
-                                string animPathWithAnim = currentPath + ".anim";
-                                string animPathWithoutExtension = Path.GetFileNameWithoutExtension(animPathWithAnim);
+                                string animPathWithAnim = currentPath + ".fbx";
+                                string animPathWithoutExtension = Path.GetFileNameWithoutExtension(currentPath);
                                 tempType.GetProperty(currentName).SetValue(tempAnims, animPathWithoutExtension);
                                 if (!ResourceManager.GetInstance().m_unityObjectMap.ContainsKey(animPathWithoutExtension))
                                 {
-                                BailCharPlugin.Instance.Log.LogDebug("about to add the resources for "+fileNameWithoutExtension);
+                                BailCharPlugin.Instance.Log.LogInfo("about to add the resources for "+currentPath);
+                                BailCharPlugin.Instance.Log.LogInfo("sharliePort "+animPathWithoutExtension+" does not obey and doesnt work");
+                                GameObject animGameObject = realAssetBundle.LoadAsset<GameObject>(animPathWithAnim);
+                                AnimationClip animOcelot = realAssetBundle.LoadAsset<AnimationClip>(animPathWithAnim);
+                                Avatar animAirbender = realAssetBundle.LoadAsset<Avatar>(animPathWithAnim);
                                 ResourceManager.GetInstance().m_unityObjectMap.Add(animPathWithoutExtension, new ResourceManager.ResourceInfo());
                                 ResourceManager.GetInstance().m_unityObjectMap[animPathWithoutExtension].objects = new Il2CppReferenceArray<UnityEngine.Object>(3);
-                               
-                                ResourceManager.GetInstance().m_unityObjectMap[animPathWithoutExtension].objects[0] = (realAssetBundle.LoadAsset<AnimationClip>(animPathWithAnim));
-                                if (character.animatorPath != null ) {
-                                    ResourceManager.GetInstance().m_unityObjectMap[animPathWithoutExtension].objects[1] = ResourceManager.GetInstance().Load<GameObject>(character.animatorPath);
-                                    ResourceManager.GetInstance().m_unityObjectMap[animPathWithoutExtension].objects[1] = ResourceManager.GetInstance().Load<GameObject>(character.animatorPath).GetComponentInChildren<Animator>().avatar;
-
+                                if (origModelObject != null)
+                                {
+                                    ResourceManager.GetInstance().m_unityObjectMap[animPathWithoutExtension].objects[2] = origModelObject.GetComponent<Animator>().avatar;
                                 }
+                                else
+                                {
+                                    ResourceManager.GetInstance().m_unityObjectMap[animPathWithoutExtension].objects[2] = animAirbender;
+                                }
+                                ResourceManager.GetInstance().m_unityObjectMap[animPathWithoutExtension].objects[0] = animGameObject;
+                                ResourceManager.GetInstance().m_unityObjectMap[animPathWithoutExtension].objects[1] = animOcelot;
+
 
                             }
                         }

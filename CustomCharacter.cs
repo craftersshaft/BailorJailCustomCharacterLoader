@@ -30,8 +30,6 @@ namespace BailCustomChars.Data
 
         public bool replaceBones { get; set; }
 
-        public string animatorPath { get; set; }
-
 //public string smallPortraitPath;
 //private Sprite _smallPortrait;
 //public Sprite SmallPortrait => _smallPortrait ??= LoadSpriteFromZip(smallPortraitPath);
